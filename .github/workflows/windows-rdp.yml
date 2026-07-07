@@ -42,6 +42,18 @@ jobs:
           Write-Host "   RAM: 16GB"
           Write-Host "============================================"
 
+          - name: Get Tunnel URL
+  run: |
+    Start-Sleep -Seconds 10
+    try {
+      $tunnel = Invoke-RestMethod -Uri "http://localhost:4040/api/tunnels" -TimeoutSec 5
+      $url = $tunnel.tunnels[0].public_url
+      Write-Host "🌐 CLOUDFLARE TUNNEL URL: $url" -ForegroundColor Green
+      Write-Host "🔑 Use this URL to connect with cloudflared"
+    } catch {
+      Write-Host "⚠️ Tunnel API not ready yet. URL will appear in separate PowerShell window." -ForegroundColor Yellow
+    }
+
       - name: Keep Session Alive
         run: |
           Write-Host "⏳ Session Active - Keeping alive..."
